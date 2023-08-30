@@ -9,27 +9,32 @@ const changeImage = content =>{
  if(imgURL !== './img3.png'){
     image.setAttribute('margin-top', '-30px')
  }
- console.log('working!', imgURL)
 }
+
+let cwh = document.querySelector('.content-wrapper').clientHeight;
+console.log(cwh)
 
 
 contents.forEach((content, i) => {
   const otherContents = Array.from(contents).filter((c, index) => index !== i);
-  
+  let contentHeight = content.clientHeight;
+  let lastStarting = cwh - contentHeight;
+console.log(lastStarting)
+
   ScrollTrigger.create({
     trigger: content,
     scroller: ".left-content",
-    markers: true,
+    // scroller:'.content-wrapper',
+    // markers: true,
     start: () => content.offsetHeight < window.innerHeight ? i === 1 ? "top 20%" : "top 30%" : "bottom 80%",
+    // start: () => content.offsetHeight < window.innerHeight ? i === 1 ? "top 20%" : i === contents.length - 1 ? `top ${lastStarting}px` : "top 30%" : "bottom 80%",
     pinSpacing: false,
     pin:'.image',
     onEnter: () => {
         changeImage(content)
       gsap.to(content, { opacity: 1 });
       gsap.to(otherContents, { opacity: 0.5 });
-      console.log(
-        'on enter'
-      )
+      
     },
     onLeave: () => {
       gsap.to(content, { opacity: 0.5 });
@@ -39,9 +44,6 @@ contents.forEach((content, i) => {
       gsap.to(content, { opacity: 1 });
       gsap.to(otherContents, { opacity: 0.5 });
     },
-
   });
-
-  
 });
 
